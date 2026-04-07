@@ -2,6 +2,7 @@ import { Form, Input, Button, Card, Typography, App } from "antd";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import type { LoginDto } from "@/types";
+import { useState } from "react";
 
 const { Title, Text } = Typography;
 
@@ -9,6 +10,7 @@ const LoginPage = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [form] = Form.useForm();
+  const [isLoading, setIsLoading] = useState(false);
 
   const { notification } = App.useApp();
 
@@ -22,6 +24,8 @@ const LoginPage = () => {
         message: "Login failed",
         description: "Invalid email or password.",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -61,7 +65,7 @@ const LoginPage = () => {
           </Form.Item>
 
           <Form.Item style={{ marginBottom: 8 }}>
-            <Button type="primary" htmlType="submit" block size="large">
+            <Button type="primary" htmlType="submit" block size="large" loading={isLoading}>
               Sign in
             </Button>
           </Form.Item>

@@ -1,30 +1,27 @@
-import {
-  Form,
-  Input,
-  Button,
-  Card,
-  Typography,
-  Select,
-  App
-} from "antd";
+import { Form, Input, Button, Card, Typography, Select, App } from "antd";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { UserRole } from "@/types";
 import type { RegisterDto } from "@/types";
+import { useState } from "react";
 
 const { Title, Text } = Typography;
-
 
 const RegisterPage = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
   const [form] = Form.useForm();
+  const [isLoading, setIsLoading] = useState(false);
 
   const { notification } = App.useApp();
 
-  const handleSubmit = async (values: RegisterDto) => {
+  const handleSubmit = async (
+    values: RegisterDto & { confirmPassword: string },
+  ) => {
     try {
-      await register(values);
+      setIsLoading(true);
+      const { confirmPassword, ...registerDto } = values; 
+      await register(registerDto);
       notification.success({
         message: "Account created!",
         description: "Please log in.",
@@ -35,6 +32,8 @@ const RegisterPage = () => {
         message: "Registration failed",
         description: "Please try again.",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -96,6 +95,25 @@ const RegisterPage = () => {
           </Form.Item>
 
           <Form.Item
+            label="Confirm Password"
+            name="confirmPassword"
+            dependencies={["password"]}
+            rules={[
+              { required: true, message: "Please confirm your password" },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("password") === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error("Passwords do not match"));
+                },
+              }),
+            ]}
+          >
+            <Input.Password placeholder="••••••••" size="large" />
+          </Form.Item>
+
+          <Form.Item
             label="Role"
             name="role"
             initialValue={UserRole.USER}
@@ -109,7 +127,13 @@ const RegisterPage = () => {
           </Form.Item>
 
           <Form.Item style={{ marginBottom: 8 }}>
-            <Button type="primary" htmlType="submit" block size="large">
+            <Button
+              type="primary"
+              htmlType="submit"
+              block
+              size="large"
+              loading={isLoading}
+            >
               Create account
             </Button>
           </Form.Item>

@@ -1,8 +1,19 @@
-import { Form, Input, InputNumber, Select, Button, Card, Typography, Space, Spin, App } from 'antd';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { claimsService } from '@/services';
-import { ClaimType, ClaimStatus, type UpdateClaimDto } from '@/types';
+import {
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  Button,
+  Card,
+  Typography,
+  Space,
+  Spin,
+  App,
+} from "antd";
+import { useNavigate, useParams } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { claimsService } from "@/services";
+import { ClaimType, ClaimStatus, type UpdateClaimDto } from "@/types";
 
 const { Title } = Typography;
 
@@ -14,7 +25,7 @@ const EditClaimPage = () => {
   const [form] = Form.useForm();
 
   const { data: claim, isLoading } = useQuery({
-    queryKey: ['claim', id],
+    queryKey: ["claim", id],
     queryFn: () => claimsService.getClaimById(id!),
     enabled: !!id,
   });
@@ -22,13 +33,13 @@ const EditClaimPage = () => {
   const updateMutation = useMutation({
     mutationFn: (dto: UpdateClaimDto) => claimsService.updateClaim(id!, dto),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['claim', id] });
-      queryClient.invalidateQueries({ queryKey: ['my-claims'] });
-      notification.success({ message: 'Claim updated successfully!' });
+      queryClient.invalidateQueries({ queryKey: ["claim", id] });
+      queryClient.invalidateQueries({ queryKey: ["my-claims"] });
+      notification.success({ message: "Claim updated successfully!" });
       navigate(`/claims/${id}`);
     },
     onError: () => {
-      notification.error({ message: 'Failed to update claim' });
+      notification.error({ message: "Failed to update claim" });
     },
   });
 
@@ -51,7 +62,9 @@ const EditClaimPage = () => {
 
   return (
     <div>
-      <Title level={4} style={{ marginBottom: 24 }}>Edit Claim</Title>
+      <Title level={4} style={{ marginBottom: 24 }}>
+        Edit Claim
+      </Title>
       <Card style={{ maxWidth: 600 }}>
         <Form
           form={form}
@@ -67,15 +80,23 @@ const EditClaimPage = () => {
           <Form.Item
             label="Title"
             name="title"
-            rules={[{ required: true, message: 'Please enter a title' }]}
+            rules={[
+              { required: true, message: "Please enter a title" },
+              { min: 3, message: "Title must be at least 3 characters" },
+              { max: 100, message: "Title cannot exceed 100 characters" },
+            ]}
           >
-            <Input placeholder="e.g. Car crash on Sudirman" />
+            <Input
+              placeholder="e.g. Car crash on Sudirman"
+              showCount
+              maxLength={100}
+            />
           </Form.Item>
 
           <Form.Item
             label="Claim Type"
             name="claimType"
-            rules={[{ required: true, message: 'Please select a claim type' }]}
+            rules={[{ required: true, message: "Please select a claim type" }]}
           >
             <Select placeholder="Select type">
               <Select.Option value={ClaimType.ACCIDENT}>Accident</Select.Option>
@@ -87,29 +108,58 @@ const EditClaimPage = () => {
           <Form.Item
             label="Amount (Rp)"
             name="claimAmount"
-            rules={[{ required: true, message: 'Please enter amount' }]}
+            rules={[
+              { required: true, message: "Please enter amount" },
+              {
+                type: "number",
+                min: 1000,
+                message: "Minimum amount is Rp 1.000",
+              },
+              {
+                type: "number",
+                max: 1000000000,
+                message: "Maximum amount is Rp 1.000.000.000",
+              },
+            ]}
           >
             <InputNumber
-              style={{ width: '100%' }}
+              style={{ width: "100%" }}
               min={0}
               step={1000}
-              formatter={(v) => `Rp ${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              parser={(v) => Number(v?.replace(/Rp\s?|(,*)/g, '') ?? 0) as 0}
+              formatter={(v) => `Rp ${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+              parser={(v) => Number(v?.replace(/Rp\s?|(,*)/g, "") ?? 0) as 0}
+              placeholder="0"
             />
           </Form.Item>
 
           <Form.Item
             label="Description"
             name="description"
-            rules={[{ required: true, message: 'Please enter description' }]}
+            rules={[
+              { required: true, message: "Please enter description" },
+              {
+                min: 10,
+                message: "Description must be at least 10 characters",
+              },
+              { max: 500, message: "Description cannot exceed 500 characters" },
+            ]}
           >
-            <Input.TextArea rows={4} />
+            <Input.TextArea
+              rows={4}
+              placeholder="Describe the incident..."
+              showCount
+              maxLength={500}
+            />
           </Form.Item>
 
           <Form.Item style={{ marginBottom: 0 }}>
             <Space>
               <Button onClick={() => navigate(`/claims/${id}`)}>Cancel</Button>
-              <Button type="primary" htmlType="submit" loading={updateMutation.isPending}>
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={updateMutation.isPending}
+              >
                 Save Changes
               </Button>
             </Space>

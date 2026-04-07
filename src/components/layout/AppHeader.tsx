@@ -1,6 +1,7 @@
-import { Layout, Button, Space, Typography, Tag } from "antd";
+import { Layout, Button, Space, Typography, Tag, Switch } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import { UserRole } from "@/types";
 
 const { Header } = Layout;
@@ -14,6 +15,7 @@ const roleColor: Record<UserRole, string> = {
 
 const AppHeader = () => {
   const { user, logout } = useAuth();
+  const { themeMode, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -24,8 +26,8 @@ const AppHeader = () => {
   return (
     <Header
       style={{
-        background: "#fff",
-        borderBottom: "1px solid #f0f0f0",
+        background: themeMode === "dark" ? "#141414" : "#fff",
+        borderBottom: `1px solid ${themeMode === "dark" ? "#303030" : "#f0f0f0"}`,
         padding: "0 24px",
         display: "flex",
         alignItems: "center",
@@ -37,6 +39,18 @@ const AppHeader = () => {
       </Text>
 
       <Space>
+        {/* Dark mode toggle */}
+        <Space size={6}>
+          <Text style={{ fontSize: 12 }}>
+            {themeMode === "dark" ? "🌙" : "☀️"}
+          </Text>
+          <Switch
+            size="small"
+            checked={themeMode === "dark"}
+            onChange={toggleTheme}
+          />
+        </Space>
+
         {user && (
           <>
             <Text type="secondary">{user.fullName}</Text>
@@ -50,5 +64,4 @@ const AppHeader = () => {
     </Header>
   );
 };
-
 export default AppHeader;

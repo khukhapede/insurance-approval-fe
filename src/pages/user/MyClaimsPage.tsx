@@ -1,4 +1,4 @@
-import { Table, Button, Typography, Space } from "antd";
+import { Table, Button, Typography, Space, Empty } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { claimsService } from "@/services";
@@ -99,6 +99,18 @@ const MyClaimsPage = () => {
         columns={columns}
         dataSource={claims}
         loading={isLoading}
+        locale={{
+          emptyText: (
+            <Empty
+              description="You haven't submitted any claims yet"
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+            >
+              <Button type="primary" onClick={() => navigate("/claims/submit")}>
+                Submit your first claim
+              </Button>
+            </Empty>
+          ),
+        }}
       />
     </div>
   );

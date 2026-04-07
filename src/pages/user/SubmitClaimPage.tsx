@@ -7,7 +7,6 @@ import {
   Card,
   Typography,
   Space,
-  notification,
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -54,9 +53,17 @@ const SubmitClaimPage = () => {
           <Form.Item
             label="Title"
             name="title"
-            rules={[{ required: true, message: "Please enter a title" }]}
+            rules={[
+              { required: true, message: "Please enter a title" },
+              { min: 3, message: "Title must be at least 3 characters" },
+              { max: 100, message: "Title cannot exceed 100 characters" },
+            ]}
           >
-            <Input placeholder="e.g. Car crash on Sudirman" />
+            <Input
+              placeholder="e.g. Car crash on Sudirman"
+              showCount
+              maxLength={100}
+            />
           </Form.Item>
 
           <Form.Item
@@ -74,7 +81,19 @@ const SubmitClaimPage = () => {
           <Form.Item
             label="Amount (Rp)"
             name="claimAmount"
-            rules={[{ required: true, message: "Please enter amount" }]}
+            rules={[
+              { required: true, message: "Please enter amount" },
+              {
+                type: "number",
+                min: 1000,
+                message: "Minimum amount is Rp 1.000",
+              },
+              {
+                type: "number",
+                max: 1000000000,
+                message: "Maximum amount is Rp 1.000.000.000",
+              },
+            ]}
           >
             <InputNumber
               style={{ width: "100%" }}
@@ -89,9 +108,21 @@ const SubmitClaimPage = () => {
           <Form.Item
             label="Description"
             name="description"
-            rules={[{ required: true, message: "Please enter description" }]}
+            rules={[
+              { required: true, message: "Please enter description" },
+              {
+                min: 10,
+                message: "Description must be at least 10 characters",
+              },
+              { max: 500, message: "Description cannot exceed 500 characters" },
+            ]}
           >
-            <Input.TextArea rows={4} placeholder="Describe the incident..." />
+            <Input.TextArea
+              rows={4}
+              placeholder="Describe the incident..."
+              showCount
+              maxLength={500}
+            />
           </Form.Item>
 
           <Form.Item style={{ marginBottom: 0 }}>

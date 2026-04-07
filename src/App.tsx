@@ -1,5 +1,6 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { UserRole } from "@/types";
+import RoleRoute from "@/components/RoleRoute";
 
 import { Routes, Route, Navigate } from "react-router-dom";
 import { App as AntApp } from "antd";
@@ -50,25 +51,85 @@ const App = () => {
           >
             {/* <Route index element={<Navigate to="/dashboard" replace />} /> */}
             <Route index element={<DashboardRedirect />} />
-            <Route path="dashboard" element={<UserDashboardPage />} />
-            <Route path="claims" element={<MyClaimsPage />} />
-            <Route path="claims/submit" element={<SubmitClaimPage />} />
-            <Route path="claims/:id" element={<ClaimDetailPage />} />
-            <Route path="claims/:id/edit" element={<EditClaimPage />} />
+            {/* User only routes */}
+            <Route
+              path="dashboard"
+              element={
+                <RoleRoute allowedRoles={[UserRole.USER]}>
+                  <UserDashboardPage />
+                </RoleRoute>
+              }
+            />
+            <Route
+              path="claims"
+              element={
+                <RoleRoute allowedRoles={[UserRole.USER]}>
+                  <MyClaimsPage />
+                </RoleRoute>
+              }
+            />
+            <Route
+              path="claims/submit"
+              element={
+                <RoleRoute allowedRoles={[UserRole.USER]}>
+                  <SubmitClaimPage />
+                </RoleRoute>
+              }
+            />
+            <Route
+              path="claims/:id"
+              element={
+                <RoleRoute allowedRoles={[UserRole.USER]}>
+                  <ClaimDetailPage />
+                </RoleRoute>
+              }
+            />
+            <Route
+              path="claims/:id/edit"
+              element={
+                <RoleRoute allowedRoles={[UserRole.USER]}>
+                  <EditClaimPage />
+                </RoleRoute>
+              }
+            />
 
+            {/* Verifier only routes */}
             <Route
               path="verifier/dashboard"
-              element={<VerifierDashboardPage />}
+              element={
+                <RoleRoute allowedRoles={[UserRole.VERIFIER]}>
+                  <VerifierDashboardPage />
+                </RoleRoute>
+              }
             />
-            <Route path="claims/submitted" element={<SubmittedClaimsPage />} />
+            <Route
+              path="claims/submitted"
+              element={
+                <RoleRoute allowedRoles={[UserRole.VERIFIER]}>
+                  <SubmittedClaimsPage />
+                </RoleRoute>
+              }
+            />
 
+            {/* Approver only routes */}
             <Route
               path="approver/dashboard"
-              element={<ApproverDashboardPage />}
+              element={
+                <RoleRoute allowedRoles={[UserRole.APPROVER]}>
+                  <ApproverDashboardPage />
+                </RoleRoute>
+              }
             />
-            <Route path="claims/verified" element={<VerifiedClaimsPage />} />
+            <Route
+              path="claims/verified"
+              element={
+                <RoleRoute allowedRoles={[UserRole.APPROVER]}>
+                  <VerifiedClaimsPage />
+                </RoleRoute>
+              }
+            />
           </Route>
-
+          
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </AuthProvider>

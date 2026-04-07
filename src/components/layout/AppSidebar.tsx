@@ -2,25 +2,7 @@ import { Menu } from "antd";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { UserRole } from "@/types";
-
-// const menuByRole = {
-//   [UserRole.USER]: [
-//     { key: "/dashboard", label: "Dashboard" },
-//     { key: "/claims", label: "My Claims" },
-//     { key: "/claims/submit", label: "Submit Claim" },
-//   ],
-//   [UserRole.VERIFIER]: [
-//     { key: "/dashboard", label: "Dashboard" },
-//     { key: "/claims/pending", label: "Pending Claims" },
-//     { key: "/claims", label: "All Claims" },
-//   ],
-//   [UserRole.APPROVER]: [
-//     { key: "/dashboard", label: "Dashboard" },
-//     { key: "/claims/verified", label: "Claims to Approve" },
-//     { key: "/claims", label: "All Claims" },
-//     { key: "/users", label: "Users" },
-//   ],
-// };
+import { useTheme } from "@/contexts/ThemeContext";
 
 const menuByRole = {
   [UserRole.USER]: [
@@ -40,6 +22,7 @@ const menuByRole = {
 
 const AppSidebar = () => {
   const { user } = useAuth();
+  const { themeMode } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -51,9 +34,14 @@ const AppSidebar = () => {
     <Menu
       mode="inline"
       selectedKeys={[location.pathname]}
-      style={{ height: "100%", borderRight: 0 }}
+      style={{
+        height: "100%",
+        borderRight: 0,
+        background: themeMode === "dark" ? "#141414" : "#fff",
+      }}
       items={items}
       onClick={({ key }) => navigate(key)}
+      theme={themeMode}
     />
   );
 };

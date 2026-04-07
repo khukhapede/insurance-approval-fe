@@ -1,4 +1,13 @@
-import { Table, Button, Typography, Modal, Input, App, Space } from "antd";
+import {
+  Table,
+  Button,
+  Typography,
+  Modal,
+  Input,
+  App,
+  Space,
+  Empty,
+} from "antd";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -127,6 +136,14 @@ const SubmittedClaimsPage = () => {
         columns={columns}
         dataSource={claims}
         loading={isLoading}
+        locale={{
+          emptyText: (
+            <Empty
+              description="No claims found"
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+            />
+          ),
+        }}
       />
 
       {/* Verify Modal */}
