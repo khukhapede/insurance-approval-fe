@@ -6,13 +6,13 @@ import { ClaimStatus, type Claim, ClaimType } from "@/types";
 import { ClaimStatusBadge, ClaimTypeTag } from "@/components/shared";
 const { Title } = Typography;
 
-const statusColor: Record<ClaimStatus, string> = {
-  [ClaimStatus.DRAFT]: "default",
-  [ClaimStatus.SUBMITTED]: "blue",
-  [ClaimStatus.VERIFIED]: "orange",
-  [ClaimStatus.APPROVED]: "green",
-  [ClaimStatus.REJECTED]: "red",
-};
+// const statusColor: Record<ClaimStatus, string> = {
+//   [ClaimStatus.DRAFT]: "default",
+//   [ClaimStatus.SUBMITTED]: "blue",
+//   [ClaimStatus.VERIFIED]: "orange",
+//   [ClaimStatus.APPROVED]: "green",
+//   [ClaimStatus.REJECTED]: "red",
+// };
 
 const MyClaimsPage = () => {
   const navigate = useNavigate();

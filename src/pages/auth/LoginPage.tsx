@@ -1,6 +1,7 @@
 import { Form, Input, Button, Card, Typography, App } from "antd";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTheme } from '@/contexts/ThemeContext';
 import type { LoginDto } from "@/types";
 import { useState } from "react";
 
@@ -8,9 +9,11 @@ const { Title, Text } = Typography;
 
 const LoginPage = () => {
   const { login } = useAuth();
+   const { themeMode } = useTheme();
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
+  
 
   const { notification } = App.useApp();
 
@@ -36,7 +39,7 @@ const LoginPage = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "#f5f5f5",
+         background: themeMode === 'dark' ? '#141414' : '#f5f5f5',
       }}
     >
       <Card style={{ width: 380, borderRadius: 12 }}>

@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { App, notification } from "antd";
+import { notification } from "antd";
 import type { ApiError } from "@/types";
 
 const api = axios.create({

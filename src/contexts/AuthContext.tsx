@@ -7,6 +7,7 @@ import {
   useCallback,
   ReactNode,
 } from "react";
+import { jwtDecode } from 'jwt-decode';
 import { authService } from "@/services";
 import type { User, LoginDto, RegisterDto } from "@/types";
 
@@ -27,23 +28,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // On app load, check if token exists and fetch profile
+
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      authService
-        .getProfile()
-        .then(setUser)
-        .catch(() => localStorage.removeItem("token"))
-        .finally(() => setIsLoading(false));
-    } else {
+  const token = localStorage.getItem('token');
+  if (token) {
+    try {
+      const decoded = jwtDecode<{ exp: number }>(token);
+      const isExpired = decoded.exp * 1000 < Date.now();
+      if (isExpired) {
+        localStorage.removeItem('token');
+        setIsLoading(false);
+        return;
+      }
+    } catch {
+      localStorage.removeItem('token');
       setIsLoading(false);
+      return;
     }
-  }, []);
+
+    authService
+      .getProfile()
+      .then(setUser)
+      .catch(() => localStorage.removeItem('token'))
+      .finally(() => setIsLoading(false));
+  } else {
+    setIsLoading(false);
+  }
+}, []);
 
   const login = async (dto: LoginDto) => {
     const { accessToken, user } = await authService.login(dto);
-    localStorage.setItem("token", accessToken); // 👈 was access_token
+    localStorage.setItem("token", accessToken); 
     setUser(user);
   };
 

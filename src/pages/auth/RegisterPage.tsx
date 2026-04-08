@@ -1,6 +1,7 @@
 import { Form, Input, Button, Card, Typography, Select, App } from "antd";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import { UserRole } from "@/types";
 import type { RegisterDto } from "@/types";
 import { useState } from "react";
@@ -11,6 +12,7 @@ const RegisterPage = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
   const [form] = Form.useForm();
+  const { themeMode } = useTheme();
   const [isLoading, setIsLoading] = useState(false);
 
   const { notification } = App.useApp();
@@ -20,7 +22,7 @@ const RegisterPage = () => {
   ) => {
     try {
       setIsLoading(true);
-      const { confirmPassword, ...registerDto } = values; 
+      const { confirmPassword, ...registerDto } = values;
       await register(registerDto);
       notification.success({
         message: "Account created!",
@@ -44,7 +46,7 @@ const RegisterPage = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "#f5f5f5",
+        background: themeMode === "dark" ? "#141414" : "#f5f5f5",
       }}
     >
       <Card style={{ width: 380, borderRadius: 12 }}>
