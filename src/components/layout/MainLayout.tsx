@@ -1,10 +1,11 @@
 import { Layout, Breadcrumb } from "antd";
 import { useTheme } from "@/contexts/ThemeContext";
 import { useState } from "react";
-
+import { useQuery } from "@tanstack/react-query";
 import AppHeader from "./AppHeader";
 import AppSidebar from "./AppSidebar";
 import { useLocation, useNavigate, Outlet } from "react-router-dom";
+import { claimsService } from '@/services';
 
 const { Sider, Content } = Layout;
 const breadcrumbMap: Record<string, string> = {
@@ -23,14 +24,39 @@ const MainLayout = () => {
   const { themeMode } = useTheme();
   const [collapsed, setCollapsed] = useState(false);
 
+  // const pathSnippets = location.pathname.split("/").filter(Boolean);
+  // const breadcrumbItems = [
+  //   { title: "Home", onClick: () => navigate("/") },
+  //   ...pathSnippets.map((_, index) => {
+  //     const url = `/${pathSnippets.slice(0, index + 1).join("/")}`;
+  //     return {
+  //       title: breadcrumbMap[url] ?? url,
+  //     };
+  //   }),
+  // ];
+
+  const claimIdMatch = location.pathname.match(/^\/claims\/([0-9a-f-]{36})/);
+  const claimId = claimIdMatch?.[1];
+
+  const { data: claim } = useQuery({
+    queryKey: ["claim", claimId],
+    queryFn: () => claimsService.getClaimById(claimId!),
+    enabled: !!claimId,
+  });
+
   const pathSnippets = location.pathname.split("/").filter(Boolean);
   const breadcrumbItems = [
     { title: "Home", onClick: () => navigate("/") },
-    ...pathSnippets.map((_, index) => {
+    ...pathSnippets.map((snippet, index) => {
       const url = `/${pathSnippets.slice(0, index + 1).join("/")}`;
-      return {
-        title: breadcrumbMap[url] ?? url,
-      };
+      const isUUID = /^[0-9a-f-]{36}$/.test(snippet);
+      const isEdit = snippet === "edit";
+
+      let title = breadcrumbMap[url] ?? snippet;
+      if (isUUID) title = claim?.claimNumber ?? "Claim Detail";
+      if (isEdit) title = "Edit";
+
+      return { title };
     }),
   ];
 
