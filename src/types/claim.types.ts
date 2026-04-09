@@ -10,9 +10,11 @@ export enum ClaimStatus {
 }
 
 export enum ClaimType {
+  MEDICAL = 'medical',
   ACCIDENT = 'accident',
-  HEALTH = 'health',
   PROPERTY = 'property',
+  LIFE = 'life',
+  OTHER = 'other',
 }
 
 export interface Claim {

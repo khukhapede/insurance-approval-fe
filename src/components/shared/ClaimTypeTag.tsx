@@ -2,9 +2,11 @@ import { Tag } from "antd";
 import { ClaimType } from "@/types";
 
 const typeConfig: Record<ClaimType, { color: string; label: string }> = {
+  [ClaimType.MEDICAL]: { color: "cyan", label: "Medical" },
   [ClaimType.ACCIDENT]: { color: "volcano", label: "Accident" },
-  [ClaimType.HEALTH]: { color: "cyan", label: "Health" },
   [ClaimType.PROPERTY]: { color: "purple", label: "Property" },
+  [ClaimType.LIFE]: { color: "green", label: "Life" },
+  [ClaimType.OTHER]: { color: "default", label: "Other" },
 };
 
 interface Props {

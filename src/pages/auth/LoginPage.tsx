@@ -1,7 +1,7 @@
 import { Form, Input, Button, Card, Typography, App } from "antd";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from "@/contexts/ThemeContext";
 import type { LoginDto } from "@/types";
 import { useState } from "react";
 
@@ -9,16 +9,16 @@ const { Title, Text } = Typography;
 
 const LoginPage = () => {
   const { login } = useAuth();
-   const { themeMode } = useTheme();
+  const { themeMode } = useTheme();
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
-  
 
   const { notification } = App.useApp();
 
   const handleSubmit = async (values: LoginDto) => {
     try {
+      setIsLoading(true);
       await login(values);
       notification.success({ message: "Welcome back!" });
       navigate("/");
@@ -39,7 +39,7 @@ const LoginPage = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-         background: themeMode === 'dark' ? '#141414' : '#f5f5f5',
+        background: themeMode === "dark" ? "#141414" : "#f5f5f5",
       }}
     >
       <Card style={{ width: 380, borderRadius: 12 }}>
@@ -68,7 +68,13 @@ const LoginPage = () => {
           </Form.Item>
 
           <Form.Item style={{ marginBottom: 8 }}>
-            <Button type="primary" htmlType="submit" block size="large" loading={isLoading}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              block
+              size="large"
+              loading={isLoading}
+            >
               Sign in
             </Button>
           </Form.Item>
