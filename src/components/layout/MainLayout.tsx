@@ -1,5 +1,6 @@
 import { Layout, Breadcrumb } from "antd";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useState } from "react";
 
 import AppHeader from "./AppHeader";
 import AppSidebar from "./AppSidebar";
@@ -20,6 +21,7 @@ const MainLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { themeMode } = useTheme();
+  const [collapsed, setCollapsed] = useState(false);
 
   const pathSnippets = location.pathname.split("/").filter(Boolean);
   const breadcrumbItems = [
@@ -44,13 +46,16 @@ const MainLayout = () => {
         style={{ background: themeMode === "dark" ? "#141414" : "#f5f5f5" }}
       >
         <Sider
+          collapsible
+          collapsed={collapsed}
+          onCollapse={(value) => setCollapsed(value)}
           width={200}
           style={{
             background: themeMode === "dark" ? "#1f1f1f" : "#fff",
             borderRight: `1px solid ${themeMode === "dark" ? "#303030" : "#f0f0f0"}`,
           }}
         >
-          <AppSidebar />
+          <AppSidebar collapsed={collapsed} />
         </Sider>
         <Layout
           style={{

@@ -1,15 +1,7 @@
-import {
-  Card,
-  Descriptions,
-  // Tag,
-  // Timeline,
-  // Typography,
-  Button,
-  App,
-} from "antd";
+import { Card, Descriptions, Button, App } from "antd";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { claimsService } from "@/services";
+import { claimsService, activityService } from "@/services";
 import { ClaimStatus } from "@/types";
 import {
   LoadingSpinner,
@@ -18,16 +10,6 @@ import {
   ClaimTypeTag,
   ErrorAlert,
 } from "@/components/shared";
-
-// const { Title } = Typography;
-
-// const statusColor: Record<ClaimStatus, string> = {
-//   [ClaimStatus.DRAFT]: "default",
-//   [ClaimStatus.SUBMITTED]: "blue",
-//   [ClaimStatus.VERIFIED]: "orange",
-//   [ClaimStatus.APPROVED]: "green",
-//   [ClaimStatus.REJECTED]: "red",
-// };
 
 const ClaimDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -56,6 +38,12 @@ const ClaimDetailPage = () => {
     onError: () => {
       notification.error({ message: "Failed to submit claim" });
     },
+  });
+
+  const { data: activityLogs = [] } = useQuery({
+    queryKey: ["activity-logs", id],
+    queryFn: () => activityService.getLogsByClaimId(id!),
+    enabled: !!id,
   });
 
   if (isLoading) return <LoadingSpinner />;
@@ -157,7 +145,7 @@ const ClaimDetailPage = () => {
           )}
         </Card> */}
         <Card title="Activity Log" style={{ width: 280 }}>
-          <ActivityTimeline logs={claim.activityLogs ?? []} />
+          <ActivityTimeline logs={activityLogs} />
         </Card>
       </div>
     </div>

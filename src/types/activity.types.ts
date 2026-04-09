@@ -1,11 +1,13 @@
+import type { User } from "./user.types";
+
 export interface ActivityLog {
   id: string;
   action: string;
-  fromStatus: string | null;
-  toStatus: string;
-  note: string | null;
-  userId: string;
-  claimId: string;
-  user?: import("./user.types").User;
+  previousStatus: string | null;
+  newStatus: string;
+  comment: string | null;
+  performedBy: User;
+  ipAddress?: string;
+  userAgent?: string;
   createdAt: string;
 }
