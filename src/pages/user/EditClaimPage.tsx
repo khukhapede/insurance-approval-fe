@@ -99,9 +99,11 @@ const EditClaimPage = () => {
             rules={[{ required: true, message: "Please select a claim type" }]}
           >
             <Select placeholder="Select type">
+              <Select.Option value={ClaimType.MEDICAL}>Medical</Select.Option>
               <Select.Option value={ClaimType.ACCIDENT}>Accident</Select.Option>
-              <Select.Option value={ClaimType.HEALTH}>Health</Select.Option>
               <Select.Option value={ClaimType.PROPERTY}>Property</Select.Option>
+              <Select.Option value={ClaimType.LIFE}>Life</Select.Option>
+              <Select.Option value={ClaimType.OTHER}>Other</Select.Option>
             </Select>
           </Form.Item>
 
