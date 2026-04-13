@@ -142,25 +142,12 @@ const VerifiedClaimsPage = () => {
       title: "Action",
       key: "action",
       render: (_: unknown, record: Claim) => (
-        <Space.Compact>
-          <Button size="small" onClick={() => navigate(`/claims/${record.id}`)}>
-            View
-          </Button>
-          <Button
-            size="small"
-            type="primary"
-            onClick={() => handleOpenModal(record, "approve")}
-          >
-            Approve
-          </Button>
-          <Button
-            size="small"
-            danger
-            onClick={() => handleOpenModal(record, "reject")}
-          >
-            Reject
-          </Button>
-        </Space.Compact>
+        <Button
+          size="small"
+          onClick={() => navigate(`/staff/claims/${record.id}`)}
+        >
+          View
+        </Button>
       ),
     },
   ];

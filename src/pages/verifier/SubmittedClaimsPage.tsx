@@ -1,13 +1,4 @@
-import {
-  Table,
-  Button,
-  Typography,
-  Modal,
-  Input,
-  App,
-  Space,
-  Empty,
-} from "antd";
+import { Table, Button, Typography, Modal, Input, App, Empty } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -109,18 +100,12 @@ const SubmittedClaimsPage = () => {
       title: "Action",
       key: "action",
       render: (_: unknown, record: Claim) => (
-        <Space.Compact>
-          <Button size="small" onClick={() => navigate(`/claims/${record.id}`)}>
-            View
-          </Button>
-          <Button
-            size="small"
-            type="primary"
-            onClick={() => setSelectedClaim(record)}
-          >
-            Verify
-          </Button>
-        </Space.Compact>
+        <Button
+          size="small"
+          onClick={() => navigate(`/staff/claims/${record.id}`)}
+        >
+          View
+        </Button>
       ),
     },
   ];

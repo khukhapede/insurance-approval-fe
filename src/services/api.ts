@@ -26,12 +26,15 @@ api.interceptors.response.use(
     const message = error.response?.data?.message || "Something went wrong";
 
     if (status === 401) {
-      localStorage.removeItem("token");
-      window.location.href = "/login";
-      notification.error({
-        message: "Session expired",
-        description: "Please log in again.",
-      });
+      const token = localStorage.getItem("token");
+      if (token) {
+        localStorage.removeItem("token");
+        notification.error({
+          message: "Session expired",
+          description: "Please log in again.",
+        });
+        window.location.href = "/login";
+      }
     } else if (status === 403) {
       notification.error({
         message: "Access denied",

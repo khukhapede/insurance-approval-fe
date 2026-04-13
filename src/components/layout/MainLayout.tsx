@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import AppHeader from "./AppHeader";
 import AppSidebar from "./AppSidebar";
 import { useLocation, useNavigate, Outlet } from "react-router-dom";
-import { claimsService } from '@/services';
+import { claimsService } from "@/services";
 
 const { Sider, Content } = Layout;
 const breadcrumbMap: Record<string, string> = {
@@ -16,6 +16,7 @@ const breadcrumbMap: Record<string, string> = {
   "/claims/submitted": "Submitted Claims",
   "/approver/dashboard": "Dashboard",
   "/claims/verified": "Verified Claims",
+  "/staff/claims": "Claims",
 };
 
 const MainLayout = () => {
@@ -23,17 +24,6 @@ const MainLayout = () => {
   const navigate = useNavigate();
   const { themeMode } = useTheme();
   const [collapsed, setCollapsed] = useState(false);
-
-  // const pathSnippets = location.pathname.split("/").filter(Boolean);
-  // const breadcrumbItems = [
-  //   { title: "Home", onClick: () => navigate("/") },
-  //   ...pathSnippets.map((_, index) => {
-  //     const url = `/${pathSnippets.slice(0, index + 1).join("/")}`;
-  //     return {
-  //       title: breadcrumbMap[url] ?? url,
-  //     };
-  //   }),
-  // ];
 
   const claimIdMatch = location.pathname.match(/^\/claims\/([0-9a-f-]{36})/);
   const claimId = claimIdMatch?.[1];

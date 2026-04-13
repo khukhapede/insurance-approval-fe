@@ -22,6 +22,7 @@ import SubmittedClaimsPage from "@/pages/verifier/SubmittedClaimsPage";
 import ApproverDashboardPage from "@/pages/approver/ApproverDashboardPage";
 import VerifiedClaimsPage from "@/pages/approver/VerifiedClaimsPage";
 
+import ClaimReviewPage from "@/pages/staff/ClaimReviewPage";
 const DashboardRedirect = () => {
   const { user } = useAuth();
   if (user?.role === UserRole.VERIFIER)
@@ -128,8 +129,20 @@ const App = () => {
                 </RoleRoute>
               }
             />
+
+            {/* Staff routes */}
+            <Route
+              path="staff/claims/:id"
+              element={
+                <RoleRoute
+                  allowedRoles={[UserRole.VERIFIER, UserRole.APPROVER]}
+                >
+                  <ClaimReviewPage />
+                </RoleRoute>
+              }
+            />
           </Route>
-          
+
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </AuthProvider>
