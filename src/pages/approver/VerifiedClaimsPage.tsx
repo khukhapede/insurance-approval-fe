@@ -1,13 +1,4 @@
-import {
-  Table,
-  Button,
-  Typography,
-  Modal,
-  Input,
-  App,
-  Space,
-  Empty,
-} from "antd";
+import { Table, Button, Typography, Modal, Input, App, Empty } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -67,11 +58,11 @@ const VerifiedClaimsPage = () => {
       notification.error({ message: "Failed to reject claim" });
     },
   });
-  const handleOpenModal = (claim: Claim, type: ActionType) => {
-    setSelectedClaim(claim);
-    setActionType(type);
-    setComment("");
-  };
+  // const handleOpenModal = (claim: Claim, type: ActionType) => {
+  //   setSelectedClaim(claim);
+  //   setActionType(type);
+  //   setComment("");
+  // };
 
   const handleCloseModal = () => {
     setSelectedClaim(null);
